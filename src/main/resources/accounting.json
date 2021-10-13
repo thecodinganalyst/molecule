@@ -1,0 +1,30 @@
+{
+  "definitions": {
+    "account-type": ["debit", "credit"],
+    "account-group": {
+      "name": "MText",
+      "type": "account-type"
+    },
+    "account": {
+      "id": "MText",
+      "name": "MText",
+      "group": "account-group",
+      "currency": "currency",
+      "opening-balance": "MNumber",
+      "opening-date": "MDate",
+      "statement-day": "MInteger"
+    },
+    "journal-entry": {
+      "id": "MText",
+      "transaction-date": "MText",
+      "description": "MText",
+      "currency": "currency",
+      "amount": "MNumber",
+      "debit": "account",
+      "credit": "account",
+      "posted-date": "MDate",
+      "debit-statement": "MDate",
+      "credit-statement": "MDate"
+    }
+  }
+}

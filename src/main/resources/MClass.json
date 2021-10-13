@@ -1,0 +1,16 @@
+{
+  "MClass": {
+    "name": "MText",
+    "properties": "MList:MProperty",
+    "methods": "MList:MMethod"
+  },
+  "MProperty": {
+    "name": "MText",
+    "required": "MBoolean"
+  },
+  "MMethod": {
+    "name": "MText",
+    "inputs": "MMap:MType",
+    "output": "MType"
+  }
+}
