@@ -1,5 +1,9 @@
 {
-  "day": "MInteger",
-  "month": "MInteger",
-  "year": "MInteger"
+  "key": "MDate",
+  "type": "MMap",
+  "value": {
+    "day": "MInteger",
+    "month": "MInteger",
+    "year": "MInteger"
+  }
 }

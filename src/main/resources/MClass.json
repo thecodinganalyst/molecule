@@ -1,16 +1,28 @@
-{
-  "MClass": {
-    "name": "MText",
-    "properties": "MList:MProperty",
-    "methods": "MList:MMethod"
+[
+  {
+    "key": "MClass",
+    "type": "MMap",
+    "value": {
+      "name": "MText",
+      "properties": "MList:MProperty",
+      "methods": "MList:MMethod"
+    }
   },
-  "MProperty": {
-    "name": "MText",
-    "required": "MBoolean"
+  {
+    "key": "MProperty",
+    "type": "MMap",
+    "value": {
+      "name": "MText",
+      "required": "MBoolean"
+    }
   },
-  "MMethod": {
-    "name": "MText",
-    "inputs": "MMap:MType",
-    "output": "MType"
+  {
+    "key": "MMethod",
+    "type": "MMap",
+    "value": {
+      "name": "MText",
+      "inputs": "MMap:MType",
+      "output": "MType"
+    }
   }
-}
+]

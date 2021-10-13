@@ -4,6 +4,8 @@ interface Testable{
     fun test(value: String): MType
 }
 
+
+
 open class MType(val name: String, val parent: MType?, val testFunction: (String) -> Boolean): Testable{
 
     init {
@@ -25,4 +27,9 @@ object MTypeLibrary {
         MBoolean.name to MBoolean,
         MInteger.name to MInteger
     )
+
+    /* adds a new type into library if the key is not associated, returning true, and false otherwise */
+    fun register(newType: MType) = types.putIfAbsent(newType.name, newType) == null
+
+    fun get(typeName: String) = types[typeName]
 }

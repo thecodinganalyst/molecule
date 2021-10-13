@@ -8,6 +8,24 @@ import org.junit.jupiter.api.assertThrows
 internal class MTypeTest {
 
     @Test
+    fun `MTypeLibrary doesn't allow registering types which already exists`(){
+        assertFalse(MTypeLibrary.register(MType("MNumber", MText) { true }))
+    }
+
+    @Test
+    fun `MTypeLibrary can register new type`(){
+        assertTrue(MTypeLibrary.register(MType("TestType", MText) { true }))
+    }
+
+    @Test
+    fun `MTypeLibrary contains MText, MNumber, MBoolean, MInteger`(){
+        assertNotNull(MTypeLibrary.get("MText"))
+        assertNotNull(MTypeLibrary.get("MNumber"))
+        assertNotNull(MTypeLibrary.get("MBoolean"))
+        assertNotNull(MTypeLibrary.get("MInteger"))
+    }
+
+    @Test
     fun `Parent shouldn't be null for MType declaration`(){
         assertThrows<Throwable> { MType("Test", null){ true } }
     }

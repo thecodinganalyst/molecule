@@ -1,11 +1,18 @@
 package com.hevlar.molecule.core
 
-class MDefinition(val key: String, val type: MType){
-}
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
-class MData(val key: String, var value: String){
-    var type: MType? = null
-    constructor(key: String, value: String, type: MType?): this(key, value){
-        this.type = type
+class MDefinition(val key: String, value: Map<String, MType>): MType(key, MMap, {
+    val testMap = try {
+        val type = object : TypeToken<Map<String, String>>(){}.type
+        Gson().fromJson<Map<String, String>>(it, type)
+    }catch (e: Throwable){
+        throw e
     }
-}
+
+    testMap.keys.containsAll(value.keys) && testMap.all { test ->
+        val propType = value[test.key]
+        propType?.test(test.value) == propType
+    }
+})
