@@ -4,8 +4,8 @@
     "type": "MMap",
     "value": {
       "name": "MText",
-      "properties": "MList:MProperty",
-      "methods": "MList:MMethod"
+      "properties": "MMap:MProperty",
+      "methods": "MMap:MMethod"
     }
   },
   {

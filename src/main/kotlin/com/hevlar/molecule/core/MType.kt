@@ -4,8 +4,6 @@ interface Testable{
     fun test(value: String): MType
 }
 
-
-
 open class MType(val name: String, val parent: MType?, val testFunction: (String) -> Boolean): Testable{
 
     init {
