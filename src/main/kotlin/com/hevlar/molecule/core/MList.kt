@@ -9,4 +9,12 @@ object MList: MType("MList", MText, {
     }catch (e: Throwable){
         false
     }
-})
+}){
+    override fun parse(value: String): List<Any>? {
+        return try{
+            Gson().fromJson(value, JsonArray::class.java).toList()
+        }catch(e: Throwable){
+            null
+        }
+    }
+}

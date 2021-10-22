@@ -1,5 +1,8 @@
 package com.hevlar.molecule.core
 
+import java.math.BigDecimal
+import java.math.BigInteger
+
 interface Testable{
     fun test(value: String): MType
 }
@@ -11,12 +14,27 @@ open class MType(val name: String, val parent: MType?, val testFunction: (String
     }
 
     override fun test(value: String): MType = if (testFunction(value)){ this } else { parent!!.test(value) }
+
+    open fun parse(value: String): Any? = value
 }
 
 object MText: MType("MText", null, { true })
-object MNumber: MType("MNumber", MText, { it.toBigDecimalOrNull() != null })
-object MBoolean: MType("MBoolean", MText, { it.toBooleanStrictOrNull() == true || it.toBooleanStrictOrNull() == false })
-object MInteger: MType("MInteger", MNumber, { it.toBigIntegerOrNull() != null })
+
+object MNumber: MType("MNumber", MText, { it.toBigDecimalOrNull() != null }){
+    override fun parse(value: String): BigDecimal? {
+        return value.toBigDecimalOrNull()
+    }
+}
+object MBoolean: MType("MBoolean", MText, { it.toBooleanStrictOrNull() == true || it.toBooleanStrictOrNull() == false }){
+    override fun parse(value: String): Boolean? {
+        return value.toBooleanStrictOrNull()
+    }
+}
+object MInteger: MType("MInteger", MNumber, { it.toBigIntegerOrNull() != null }){
+    override fun parse(value: String): BigInteger? {
+        return value.toBigIntegerOrNull();
+    }
+}
 
 object MTypeLibrary {
     private val types: MutableMap<String, MType> = mutableMapOf(

@@ -1,18 +1,16 @@
 package com.hevlar.molecule.core
 
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-
-open class MDefinition(val key: String, value: Map<String, MType>): MType(key, MMap, {
-    val testMap = try {
-        val type = object : TypeToken<Map<String, String>>(){}.type
-        Gson().fromJson<Map<String, String>>(it, type)
+class MDefinition(name: String, type: MType): MType(name, MText, {
+    val defaultPackage = "com.hevlar.molecule.core"
+    try {
+        val isMap = MMap.test(it) == MMap
+        val map = MMap.parse(it)!!
+        val mapContainsNameAndType = map.keys.containsAll(listOf("name", "type"))
+        val givenType = map["type"].toString()
+        val fqn = if (givenType.contains(".")) givenType else "${defaultPackage}.${givenType}"
+        val testTypeExists = Class.forName(fqn).kotlin.objectInstance != null
+        isMap && mapContainsNameAndType && testTypeExists
     }catch (e: Throwable){
-        throw e
-    }
-
-    testMap.keys.containsAll(value.keys) && testMap.all { test ->
-        val propType = value[test.key]
-        propType?.test(test.value) == propType
+        false
     }
 })
