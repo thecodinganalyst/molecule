@@ -9,6 +9,14 @@ interface Testable{
 
 open class MType(val name: String, val parent: MType?, val testFunction: (String) -> Boolean): Testable{
 
+    companion object {
+        fun getInstance(typeName: String): MType{
+            val defaultPackage = this::class.java.packageName
+            val fqn = if (typeName.contains(".")) typeName else "${defaultPackage}.${typeName}"
+            return Class.forName(fqn).kotlin.objectInstance as MType
+        }
+    }
+
     init {
         if (parent == null && name != "MText") throw Throwable("Only MText can have no parents")
     }
@@ -16,6 +24,18 @@ open class MType(val name: String, val parent: MType?, val testFunction: (String
     override fun test(value: String): MType = if (testFunction(value)){ this } else { parent!!.test(value) }
 
     open fun parse(value: String): Any? = value
+
+    override fun equals(other: Any?): Boolean {
+        if (other !is MType) return false
+        return this.name == other.name && this.parent == other.parent
+    }
+
+    override fun hashCode(): Int {
+        var result = name.hashCode()
+        result = 31 * result + (parent?.hashCode() ?: 0)
+        result = 31 * result + testFunction.hashCode()
+        return result
+    }
 }
 
 object MText: MType("MText", null, { true })
@@ -32,7 +52,7 @@ object MBoolean: MType("MBoolean", MText, { it.toBooleanStrictOrNull() == true |
 }
 object MInteger: MType("MInteger", MNumber, { it.toBigIntegerOrNull() != null }){
     override fun parse(value: String): BigInteger? {
-        return value.toBigIntegerOrNull();
+        return value.toBigIntegerOrNull()
     }
 }
 
