@@ -1,9 +1,7 @@
 package com.hevlar.molecule.core
 
 import com.google.gson.Gson
-import com.google.gson.JsonElement
 import com.google.gson.JsonObject
-import com.google.gson.JsonPrimitive
 
 object MMap: MType("MMap", MText, {
     try{
@@ -19,15 +17,17 @@ object MMap: MType("MMap", MText, {
                 .entrySet()
                 .associate { it.key to it.value }
                 .mapValues {
-                    if (it.value.isJsonPrimitive){
+                    if (it.value.isJsonPrimitive) {
                         val primitive = it.value.asJsonPrimitive
-                        if(primitive.isBoolean) {
+                        if (primitive.isBoolean) {
                             it.value.asJsonPrimitive.asBoolean
-                        } else if(primitive.isNumber){
+                        } else if (primitive.isNumber) {
                             it.value.asJsonPrimitive.asBigDecimal
                         } else {
                             it.value.asString
                         }
+                    }else if (it.value.isJsonObject){
+                        parse(it.value.toString()) ?: {}
                     }else{
                         it.value
                     }
