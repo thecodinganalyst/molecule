@@ -21,4 +21,25 @@ internal class MClassTest {
         """.trimIndent()
         assertEquals(MMap, MClass.test(json))
     }
+
+    @Test
+    fun `MClass parse ok`(){
+        val json = """
+            { "day": "MInteger", "month": "MInteger", "year": "MInteger" }
+        """.trimIndent()
+        val expected = mapOf(
+            "day" to MInteger,
+            "month" to MInteger,
+            "year" to MInteger
+        )
+        assertEquals(expected, MClass.parse(json))
+    }
+
+    @Test
+    fun `MClass parse null when type is invalid`(){
+        val json = """
+            { "day": "Integer", "month": "MInteger", "year": "MInteger" }
+        """.trimIndent()
+        assertNull(MClass.parse(json))
+    }
 }
