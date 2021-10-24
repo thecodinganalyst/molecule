@@ -9,8 +9,9 @@ and type must be a subtype of MType. e.g. { name: MText } or { age: MNumber }
 class MDefinition(name: String, val type: MType): MType(name, MMap, {
     val defaultPackage = "com.hevlar.molecule.core"
     try {
-        val isMap = MMap.test(it) == MMap
-        val map = MMap.parse(it)!!
+        val itStr = if (it.trim().startsWith("{") && it.trim().endsWith("}")) it else "{ $it }"
+        val isMap = MMap.test(itStr) == MMap
+        val map = MMap.parse(itStr)!!
         val givenType = map.values.first().toString();
         val fqn = if (givenType.contains(".")) givenType else "${defaultPackage}.${givenType}"
         val typeInstance = Class.forName(fqn).kotlin.objectInstance
@@ -23,8 +24,9 @@ class MDefinition(name: String, val type: MType): MType(name, MMap, {
     override fun parse(value: String): MDefinition? {
         val defaultPackage = "com.hevlar.molecule.core"
         return try {
-            val isMap = MMap.test(value) == MMap
-            val map = MMap.parse(value)!!
+            val valueStr = if (value.trim().startsWith("{") && value.trim().endsWith("}")) value else "{ $value }"
+            val isMap = MMap.test(valueStr) == MMap
+            val map = MMap.parse(valueStr)!!
             val givenType = map.values.first().toString();
             val fqn = if (givenType.contains(".")) givenType else "${defaultPackage}.${givenType}"
             val typeInstance = Class.forName(fqn).kotlin.objectInstance
