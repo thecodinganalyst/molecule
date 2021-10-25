@@ -1,7 +1,5 @@
 {
-  "key": "MDate",
-  "type": "MMap",
-  "value": {
+  "MDate": {
     "day": "MInteger",
     "month": "MInteger",
     "year": "MInteger"
