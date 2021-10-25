@@ -9,7 +9,7 @@ MProperty defines the properties for a class, with the following attributes
 2. required - default true
 3. default - optional
  */
-object MProperty : MType("MProperty", MMap, {
+object MProperty : MType("MProperty", Data, {
     val testMap = try {
         val type = object : TypeToken<Map<String, String>>(){}.type
         Gson().fromJson<Map<String, String>>(it, type)
@@ -19,7 +19,7 @@ object MProperty : MType("MProperty", MMap, {
 
     if (!testMap.containsKey("type")) throw Throwable("Invalid Property: type is not defined in property declaration")
     if (MDefinition.test(testMap["type"]!!) != MDefinition) throw Throwable("Invalid Property: type is not a valid MDefinition")
-    if (testMap.containsKey("required") && MBoolean.test(testMap["required"]!!) != MBoolean) {
+    if (testMap.containsKey("required") && Flag.test(testMap["required"]!!) != Flag) {
         throw Throwable("Invalid Property: required field is not a valid boolean")
     }
     if (testMap.containsKey("default")){
@@ -33,5 +33,5 @@ object MProperty : MType("MProperty", MMap, {
 
     true
 }){
-    
+
 }

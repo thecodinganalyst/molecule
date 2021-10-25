@@ -16,7 +16,7 @@ internal class MMethodTest {
                 "output": "MNumber"
             }
         """.trimIndent()
-        assertEquals(MMap, MMethod.test(json))
+        assertEquals(Data, MMethod.test(json))
     }
 
     @Test
@@ -24,10 +24,10 @@ internal class MMethodTest {
         val json = """
             {
                 "inputs": {
-                    "a": "MNumber",
-                    "b": "MNumber"
+                    "a": "Number",
+                    "b": "Number"
                 },
-                "output": "MNumber"
+                "output": "Number"
             }
         """.trimIndent()
         assertEquals(MMethod, MMethod.test(json))

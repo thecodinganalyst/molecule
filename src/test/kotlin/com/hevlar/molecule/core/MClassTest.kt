@@ -9,7 +9,7 @@ internal class MClassTest {
     @Test
     fun `MClass test ok`(){
         val json = """
-            { "day": "MInteger", "month": "MInteger", "year": "MInteger" }
+            { "day": "Digit", "month": "Digit", "year": "Digit" }
         """.trimIndent()
         assertEquals(MClass, MClass.test(json))
     }
@@ -17,20 +17,20 @@ internal class MClassTest {
     @Test
     fun `test MClass invalid MType should fail`(){
         val json = """
-            { "day": "Integer", "month": "MInteger", "year": "MInteger" }
+            { "day": "Integer", "month": "Digit", "year": "Digit" }
         """.trimIndent()
-        assertEquals(MMap, MClass.test(json))
+        assertEquals(Data, MClass.test(json))
     }
 
     @Test
     fun `MClass parse ok`(){
         val json = """
-            { "day": "MInteger", "month": "MInteger", "year": "MInteger" }
+            { "day": "Digit", "month": "Digit", "year": "Digit" }
         """.trimIndent()
         val expected = mapOf(
-            "day" to MInteger,
-            "month" to MInteger,
-            "year" to MInteger
+            "day" to Digit,
+            "month" to Digit,
+            "year" to Digit
         )
         assertEquals(expected, MClass.parse(json))
     }
@@ -38,7 +38,7 @@ internal class MClassTest {
     @Test
     fun `MClass parse null when type is invalid`(){
         val json = """
-            { "day": "Integer", "month": "MInteger", "year": "MInteger" }
+            { "day": "Integer", "month": "Digit", "year": "Digit" }
         """.trimIndent()
         assertNull(MClass.parse(json))
     }

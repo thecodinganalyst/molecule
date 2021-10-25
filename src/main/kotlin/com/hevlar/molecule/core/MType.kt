@@ -7,7 +7,7 @@ interface Testable{
     fun test(value: String): MType
 }
 
-open class MType(val name: String, val parent: MType?, val testFunction: (String) -> Boolean): Testable{
+open class MType(val name: String, val parent: MType?, val testFunction: (String) -> kotlin.Boolean): Testable{
 
     companion object {
         fun getInstance(typeName: String): MType{
@@ -18,7 +18,7 @@ open class MType(val name: String, val parent: MType?, val testFunction: (String
     }
 
     init {
-        if (parent == null && name != "MText") throw Throwable("Only MText can have no parents")
+        if (parent == null && name != "Text") throw Throwable("Only Text can have no parents")
     }
 
     override fun test(value: String): MType = if (testFunction(value)){ this } else { parent!!.test(value) }
@@ -38,19 +38,19 @@ open class MType(val name: String, val parent: MType?, val testFunction: (String
     }
 }
 
-object MText: MType("MText", null, { true })
+object Text: MType("Text", null, { true })
 
-object MNumber: MType("MNumber", MText, { it.toBigDecimalOrNull() != null }){
+object Number: MType("Number", Text, { it.toBigDecimalOrNull() != null }){
     override fun parse(value: String): BigDecimal? {
         return value.toBigDecimalOrNull()
     }
 }
-object MBoolean: MType("MBoolean", MText, { it.toBooleanStrictOrNull() == true || it.toBooleanStrictOrNull() == false }){
+object Flag: MType("Flag", Text, { it.toBooleanStrictOrNull() == true || it.toBooleanStrictOrNull() == false }){
     override fun parse(value: String): Boolean? {
         return value.toBooleanStrictOrNull()
     }
 }
-object MInteger: MType("MInteger", MNumber, { it.toBigIntegerOrNull() != null }){
+object Digit: MType("Digit", Number, { it.toBigIntegerOrNull() != null }){
     override fun parse(value: String): BigInteger? {
         return value.toBigIntegerOrNull()
     }
@@ -58,10 +58,10 @@ object MInteger: MType("MInteger", MNumber, { it.toBigIntegerOrNull() != null })
 
 object MTypeLibrary {
     private val types: MutableMap<String, MType> = mutableMapOf(
-        MText.name to MText,
-        MNumber.name to MNumber,
-        MBoolean.name to MBoolean,
-        MInteger.name to MInteger
+        Text.name to Text,
+        Number.name to Number,
+        Flag.name to Flag,
+        Digit.name to Digit
     )
 
     /* adds a new type into library if the key is not associated, returning true, and false otherwise */
