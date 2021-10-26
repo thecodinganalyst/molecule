@@ -18,17 +18,12 @@ object MProperty : MType("MProperty", Data, {
     }
 
     if (!testMap.containsKey("type")) throw Throwable("Invalid Property: type is not defined in property declaration")
-    if (MDefinition.test(testMap["type"]!!) != MDefinition) throw Throwable("Invalid Property: type is not a valid MDefinition")
+    val typeInstance = getInstance(testMap["type"]!!) ?: throw Throwable("Invalid Property: type is not a valid MType")
     if (testMap.containsKey("required") && Flag.test(testMap["required"]!!) != Flag) {
-        throw Throwable("Invalid Property: required field is not a valid boolean")
+        throw Throwable("Invalid Property: required field is not a valid flag")
     }
     if (testMap.containsKey("default")){
-        try {
-            val typeInstance = getInstance(testMap["type"]!!)
-            if (typeInstance.test(testMap["default"]!!) == typeInstance) throw Throwable("Invalid Property: default value does not pass test of property type")
-        }catch (e: Throwable){
-            throw Throwable("Invalid Property: Error with the default")
-        }
+        if (typeInstance.test(testMap["default"]!!) == typeInstance) throw Throwable("Invalid Property: default value does not pass test of property type")
     }
 
     it

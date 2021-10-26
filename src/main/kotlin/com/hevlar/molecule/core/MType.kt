@@ -7,10 +7,14 @@ interface Testable{
 open class MType(val name: String, val parent: MType?, val parseFunction: (String) -> Any?): Testable{
 
     companion object {
-        fun getInstance(typeName: String): MType{
-            val defaultPackage = this::class.java.packageName
-            val fqn = if (typeName.contains(".")) typeName else "${defaultPackage}.${typeName}"
-            return Class.forName(fqn).kotlin.objectInstance as MType
+        fun getInstance(typeName: String): MType?{
+            return try {
+                val defaultPackage = this::class.java.packageName
+                val fqn = if (typeName.contains(".")) typeName else "${defaultPackage}.${typeName}"
+                Class.forName(fqn).kotlin.objectInstance as MType
+            }catch (e: Throwable){
+                null
+            }
         }
     }
 

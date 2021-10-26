@@ -10,7 +10,7 @@ object MClass: MType("MClass", Data, { value ->
     try {
         val type = object : TypeToken<Map<String, String>>(){}.type
         Gson().fromJson<Map<String, String>>(value, type)
-            .mapValues { getInstance(it.value) }
+            .mapValues { getInstance(it.value) ?: throw Throwable("Invalid type: ${it.value}") }
     }catch (e: Throwable){
         null
     }

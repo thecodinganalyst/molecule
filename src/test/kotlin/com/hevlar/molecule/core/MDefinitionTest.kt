@@ -10,7 +10,7 @@ internal class MDefinitionTest{
         val json = """
             { "name": "Text" }
         """.trimIndent()
-        assertEquals(MDefinition, MDefinition.test(json))
+        assertEquals(MDefinition(), MDefinition.test(json))
     }
 
     @Test
@@ -18,7 +18,7 @@ internal class MDefinitionTest{
         val json = """
             { "Registered": "Flag" }
         """.trimIndent()
-        assertEquals(MDefinition, MDefinition.test(json))
+        assertEquals(MDefinition(), MDefinition.test(json))
     }
 
     @Test
@@ -26,7 +26,7 @@ internal class MDefinitionTest{
         val json = """
             { "Years of Experience": "Number" }
         """.trimIndent()
-        assertEquals(MDefinition, MDefinition.test(json))
+        assertEquals(MDefinition(), MDefinition.test(json))
     }
 
     @Test
@@ -34,7 +34,7 @@ internal class MDefinitionTest{
         val json = """
             { "Age": "Digit" }
         """.trimIndent()
-        assertEquals(MDefinition, MDefinition.test(json))
+        assertEquals(MDefinition(), MDefinition.test(json))
     }
 
     @Test
@@ -42,7 +42,7 @@ internal class MDefinitionTest{
         val json = """
             { "Name": "Text", "Age": "Digit" }
         """.trimIndent()
-        assertNotEquals(MDefinition, MDefinition.test(json))
+        assertNotEquals(MDefinition(), MDefinition.test(json))
         assertEquals(Data, MDefinition.test(json))
     }
 
@@ -51,7 +51,7 @@ internal class MDefinitionTest{
         val json = """
             { "Name: "MText" }
         """.trimIndent()
-        assertNotEquals(MDefinition, MDefinition.test(json))
+        assertNotEquals(MDefinition(), MDefinition.test(json))
     }
 
     @Test
@@ -59,7 +59,7 @@ internal class MDefinitionTest{
         val json = """
             { "Name": "Text" }
         """.trimIndent()
-        assertEquals(Pair("Name", Text), MDefinition.parse(json))
+        assertEquals(MDefinition("Name", Text), MDefinition.parse(json))
     }
 
     @Test
@@ -67,7 +67,7 @@ internal class MDefinitionTest{
         val json = """
             { "Registered": "Flag" }
         """.trimIndent()
-        assertEquals(Pair("Registered", Flag), MDefinition.parse(json))
+        assertEquals(MDefinition("Registered", Flag), MDefinition.parse(json))
     }
 
     @Test
@@ -75,7 +75,7 @@ internal class MDefinitionTest{
         val json = """
             { "Years of Experience": "Number" }
         """.trimIndent()
-        assertEquals(Pair("Years of Experience", Number), MDefinition.parse(json))
+        assertEquals(MDefinition("Years of Experience", Number), MDefinition.parse(json))
     }
 
     @Test
@@ -83,7 +83,7 @@ internal class MDefinitionTest{
         val json = """
             { "Age": "Digit" }
         """.trimIndent()
-        assertEquals(Pair("Age", Digit), MDefinition.parse(json))
+        assertEquals(MDefinition("Age", Digit), MDefinition.parse(json))
     }
 
     @Test
@@ -107,7 +107,7 @@ internal class MDefinitionTest{
         val json = """
             "name": "Text"
         """.trimIndent()
-        assertEquals(MDefinition, MDefinition.test(json))
+        assertEquals(MDefinition(), MDefinition.test(json))
     }
 
     @Test
@@ -115,7 +115,7 @@ internal class MDefinitionTest{
         val json = """
              "Registered": "Flag" 
         """.trimIndent()
-        assertEquals(MDefinition, MDefinition.test(json))
+        assertEquals(MDefinition(), MDefinition.test(json))
     }
 
     @Test
@@ -123,7 +123,7 @@ internal class MDefinitionTest{
         val json = """
             "Years of Experience": "Number"
         """.trimIndent()
-        assertEquals(MDefinition, MDefinition.test(json))
+        assertEquals(MDefinition(), MDefinition.test(json))
     }
 
     @Test
@@ -131,7 +131,7 @@ internal class MDefinitionTest{
         val json = """
              "Age": "Digit" 
         """.trimIndent()
-        assertEquals(MDefinition, MDefinition.test(json))
+        assertEquals(MDefinition(), MDefinition.test(json))
     }
 
     @Test
@@ -139,7 +139,7 @@ internal class MDefinitionTest{
         val json = """
              "Name: "Text", "Age", "Digit" 
         """.trimIndent()
-        assertNotEquals(MDefinition, MDefinition.test(json))
+        assertNotEquals(MDefinition(), MDefinition.test(json))
         assertEquals(Text, MDefinition.test(json))
     }
 
@@ -148,7 +148,7 @@ internal class MDefinitionTest{
         val json = """
              "Name: "MText" 
         """.trimIndent()
-        assertNotEquals(MDefinition, MDefinition.test(json))
+        assertNotEquals(MDefinition(), MDefinition.test(json))
     }
 
     @Test
@@ -156,7 +156,7 @@ internal class MDefinitionTest{
         val json = """
              "Name": "Text" 
         """.trimIndent()
-        val expected = Pair("Name", Text)
+        val expected = MDefinition("Name", Text)
         assertEquals(expected, MDefinition.parse(json))
     }
 
@@ -165,7 +165,7 @@ internal class MDefinitionTest{
         val json = """
             "Registered": "Flag"
         """.trimIndent()
-        val expected = Pair("Registered", Flag)
+        val expected = MDefinition("Registered", Flag)
         assertEquals(expected, MDefinition.parse(json))
     }
 
@@ -174,7 +174,7 @@ internal class MDefinitionTest{
         val json = """
             "Years of Experience": "Number"
         """.trimIndent()
-        val expected = Pair("Years of Experience", Number)
+        val expected = MDefinition("Years of Experience", Number)
         assertEquals(expected, MDefinition.parse(json))
     }
 
@@ -183,7 +183,7 @@ internal class MDefinitionTest{
         val json = """
              "Age": "Digit" 
         """.trimIndent()
-        val expected = Pair("Age", Digit)
+        val expected = MDefinition("Age", Digit)
         assertEquals(expected, MDefinition.parse(json))
     }
 

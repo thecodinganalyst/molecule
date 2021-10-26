@@ -9,10 +9,10 @@ object MMethod: MType("MMethod", Data, {
         val isMap = Data.test(it) == Data
         val map = Data.parse(it)
         val inputs = map!!["inputs"] as Map<*,*>
-        val inputsAreDefinitions = inputs.all { input -> MDefinition.test("${input.key}: ${input.value}") == MDefinition }
-        val outputIsDefinition = MDefinition.test("output: ${map["output"]}") == MDefinition
+        val inputsAreDefinitions = inputs.all { input -> MDefinition.test("${input.key}: ${input.value}") == MDefinition() }
+        val outputIsMType = getInstance(map["output"].toString()) != null
 
-        if (isMap && map.containsKey("inputs") && map.containsKey("output") && inputsAreDefinitions && outputIsDefinition){
+        if (isMap && map.containsKey("inputs") && map.containsKey("output") && inputsAreDefinitions && outputIsMType){
             it
         }else{
             null
