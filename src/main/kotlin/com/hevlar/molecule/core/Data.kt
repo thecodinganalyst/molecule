@@ -29,7 +29,8 @@ object Data: MType("MMap", Text, { value ->
         null
     }
 }){
-    override fun parse(value: String): Map<String, Any>? {
-        return super.parse(value) as Map<String, Any>?
+    override fun parse(value: String): Map<String, Any?>? {
+        val tmp =  this.parseFunction(value) as Map<*, *>?
+        return tmp?.mapKeys { it.key as String }
     }
 }

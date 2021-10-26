@@ -4,7 +4,7 @@ interface Testable{
     fun test(value: String): MType
 }
 
-open class MType(val name: String, val parent: MType?, private val parseFunction: (String) -> Any?): Testable{
+open class MType(val name: String, val parent: MType?, val parseFunction: (String) -> Any?): Testable{
 
     companion object {
         fun getInstance(typeName: String): MType{
