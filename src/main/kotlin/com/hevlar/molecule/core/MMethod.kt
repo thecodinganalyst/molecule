@@ -12,8 +12,12 @@ object MMethod: MType("MMethod", Data, {
         val inputsAreDefinitions = inputs.all { input -> MDefinition.test("${input.key}: ${input.value}") == MDefinition }
         val outputIsDefinition = MDefinition.test("output: ${map["output"]}") == MDefinition
 
-        isMap && map.containsKey("inputs") && map.containsKey("output") && inputsAreDefinitions && outputIsDefinition
+        if (isMap && map.containsKey("inputs") && map.containsKey("output") && inputsAreDefinitions && outputIsDefinition){
+            it
+        }else{
+            null
+        }
     }catch (e: Throwable){
-        false
+        null
     }
 })

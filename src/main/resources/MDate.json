@@ -1,7 +1,0 @@
-{
-  "MDate": {
-    "day": "MInteger",
-    "month": "MInteger",
-    "year": "MInteger"
-  }
-}

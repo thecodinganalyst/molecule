@@ -7,7 +7,7 @@ interface Testable{
     fun test(value: String): MType
 }
 
-open class MType(val name: String, val parent: MType?, val testFunction: (String) -> kotlin.Boolean): Testable{
+open class MType(val name: String, val parent: MType?, private val parseFunction: (String) -> Any?): Testable{
 
     companion object {
         fun getInstance(typeName: String): MType{
@@ -21,9 +21,9 @@ open class MType(val name: String, val parent: MType?, val testFunction: (String
         if (parent == null && name != "Text") throw Throwable("Only Text can have no parents")
     }
 
-    override fun test(value: String): MType = if (testFunction(value)){ this } else { parent!!.test(value) }
+    override fun test(value: String): MType = if (parseFunction(value) != null){ this } else { parent!!.test(value) }
 
-    open fun parse(value: String): Any? = value
+    open fun parse(value: String): Any? = parseFunction(value)
 
     override fun equals(other: Any?): Boolean {
         if (other !is MType) return false
@@ -33,24 +33,24 @@ open class MType(val name: String, val parent: MType?, val testFunction: (String
     override fun hashCode(): Int {
         var result = name.hashCode()
         result = 31 * result + (parent?.hashCode() ?: 0)
-        result = 31 * result + testFunction.hashCode()
+        result = 31 * result + parseFunction.hashCode()
         return result
     }
 }
 
-object Text: MType("Text", null, { true })
+object Text: MType("Text", null, { it })
 
-object Number: MType("Number", Text, { it.toBigDecimalOrNull() != null }){
+object Number: MType("Number", Text, { it.toBigDecimalOrNull() }){
     override fun parse(value: String): BigDecimal? {
         return value.toBigDecimalOrNull()
     }
 }
-object Flag: MType("Flag", Text, { it.toBooleanStrictOrNull() == true || it.toBooleanStrictOrNull() == false }){
+object Flag: MType("Flag", Text, { it.toBooleanStrictOrNull() }){
     override fun parse(value: String): Boolean? {
         return value.toBooleanStrictOrNull()
     }
 }
-object Digit: MType("Digit", Number, { it.toBigIntegerOrNull() != null }){
+object Digit: MType("Digit", Number, { it.toBigIntegerOrNull() }){
     override fun parse(value: String): BigInteger? {
         return value.toBigIntegerOrNull()
     }

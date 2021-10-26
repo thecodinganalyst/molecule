@@ -60,12 +60,12 @@ internal class MTypeTest {
 
     @Test
     fun `MTypeLibrary doesn't allow registering types which already exists`(){
-        assertFalse(MTypeLibrary.register(MType("Number", Text) { true }))
+        assertFalse(MTypeLibrary.register(MType("Number", Text) { it.toBigDecimalOrNull() }))
     }
 
     @Test
     fun `MTypeLibrary can register new type`(){
-        assertTrue(MTypeLibrary.register(MType("TestType", Text) { true }))
+        assertTrue(MTypeLibrary.register(MType("TestType", Text) { it }))
     }
 
     @Test
@@ -78,7 +78,7 @@ internal class MTypeTest {
 
     @Test
     fun `Parent shouldn't be null for MType declaration`(){
-        assertThrows<Throwable> { MType("Test", null){ true } }
+        assertThrows<Throwable> { MType("Test", null) { it } }
     }
 
     @Test

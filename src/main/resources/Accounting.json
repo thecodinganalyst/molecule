@@ -1,0 +1,28 @@
+{
+    "account-type": ["debit", "credit"],
+    "account-group": {
+      "name": "Text",
+      "type": "account-type"
+    },
+    "account": {
+      "id": "Text",
+      "name": "Text",
+      "group": "account-group",
+      "currency": "currency",
+      "opening-balance": "Number",
+      "opening-date": "Date",
+      "statement-day": "Digit"
+    },
+    "journal-entry": {
+      "id": "Text",
+      "transaction-date": "Date",
+      "description": "Text",
+      "currency": "currency",
+      "amount": "Number",
+      "debit": "account",
+      "credit": "account",
+      "posted-date": "Date",
+      "debit-statement": "Date",
+      "credit-statement": "Date"
+    }
+}

@@ -19,7 +19,7 @@ internal class DataTest {
         expected["locked"] = false
         val actual = Data.parse(json)
         assertNotNull(actual!!.keys)
-        assertTrue(expected.keys == actual!!.keys)
+        assertTrue(expected.keys == actual.keys)
         expected.keys.forEach { assertEquals(expected[it], actual[it]) }
     }
 

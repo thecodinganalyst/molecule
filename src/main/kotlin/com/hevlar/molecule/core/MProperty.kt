@@ -31,7 +31,5 @@ object MProperty : MType("MProperty", Data, {
         }
     }
 
-    true
-}){
-
-}
+    it
+})
