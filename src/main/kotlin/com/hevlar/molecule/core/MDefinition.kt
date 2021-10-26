@@ -1,7 +1,7 @@
 package com.hevlar.molecule.core
 
 /*
-Definition is in the format { name: type } where name is the identifier of this definition
+Definition is in the format { key: type } where key is the identifier of this definition
 and type must be a subtype of MType. e.g. { name: Text } or { age: Number }
 Definition can also contain multiple definitions, e.g { name: Text, age: Number }
  */
@@ -26,10 +26,12 @@ open class MDefinition(): MType("MDefinition", Data, { value ->
     }
 }){
 
+    var key = "MDefinition"
     var type = parent
     var definitions = listOf<MDefinition>()
 
-    constructor(name: String, type: MType) : this() {
+    constructor(key: String, type: MType) : this() {
+        this.key = name
         this.type = type
     }
 
