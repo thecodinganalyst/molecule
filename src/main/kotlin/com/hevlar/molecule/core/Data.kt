@@ -30,29 +30,6 @@ object Data: MType("MMap", Text, { value ->
     }
 }){
     override fun parse(value: String): Map<String, Any>? {
-        return try{
-            return Gson()
-                .fromJson(value, JsonObject::class.java)
-                .entrySet()
-                .associate { it.key to it.value }
-                .mapValues {
-                    if (it.value.isJsonPrimitive) {
-                        val primitive = it.value.asJsonPrimitive
-                        if (primitive.isBoolean) {
-                            it.value.asJsonPrimitive.asBoolean
-                        } else if (primitive.isNumber) {
-                            it.value.asJsonPrimitive.asBigDecimal
-                        } else {
-                            it.value.asString
-                        }
-                    }else if (it.value.isJsonObject){
-                        parse(it.value.toString()) ?: {}
-                    }else{
-                        it.value
-                    }
-                }
-        }catch (e: Throwable){
-            null
-        }
+        return super.parse(value) as Map<String, Any>?
     }
 }
