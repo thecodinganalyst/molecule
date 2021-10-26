@@ -38,12 +38,11 @@ internal class MDefinitionTest{
     }
 
     @Test
-    fun `test MDefinition multiple values should fail`(){
+    fun `test MDefinition multiple values should pass`(){
         val json = """
             { "Name": "Text", "Age": "Digit" }
         """.trimIndent()
-        assertNotEquals(MDefinition(), MDefinition.test(json))
-        assertEquals(Data, MDefinition.test(json))
+        assertEquals(MDefinition(), MDefinition.test(json))
     }
 
     @Test
@@ -89,9 +88,9 @@ internal class MDefinitionTest{
     @Test
     fun `parse MDefinition multiple values should return null`(){
         val json = """
-            { "Name: "Text", "Age", "Digit" }
+            { "Name": "Text", "Age": "Digit" }
         """.trimIndent()
-        assertNull(MDefinition.parse(json))
+        assertEquals(MDefinition(),  MDefinition.parse(json))
     }
 
     @Test
@@ -135,12 +134,11 @@ internal class MDefinitionTest{
     }
 
     @Test
-    fun `test MDefinition multiple values without braces should fail too`(){
+    fun `test MDefinition multiple values without braces should pass too`(){
         val json = """
-             "Name: "Text", "Age", "Digit" 
+             "Name": "Text", "Age": "Digit" 
         """.trimIndent()
-        assertNotEquals(MDefinition(), MDefinition.test(json))
-        assertEquals(Text, MDefinition.test(json))
+        assertEquals(MDefinition(), MDefinition.test(json))
     }
 
     @Test
@@ -188,11 +186,11 @@ internal class MDefinitionTest{
     }
 
     @Test
-    fun `parse MDefinition multiple values without braces should return null`(){
+    fun `parse MDefinition multiple values without braces should return MDefinition`(){
         val json = """
-            "Name: "Text", "Age", "Digit"
+            "Name": "Text", "Age": "Digit"
         """.trimIndent()
-        assertNull(MDefinition.parse(json))
+        assertEquals(MDefinition() , MDefinition.parse(json))
     }
 
     @Test
