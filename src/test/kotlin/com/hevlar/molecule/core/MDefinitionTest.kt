@@ -6,11 +6,55 @@ import org.junit.jupiter.api.Test
 internal class MDefinitionTest{
 
     @Test
+    fun `read definition from data and test data adhere to definition`(){
+        val dateJson = """
+            {
+              "day": "Digit",
+              "month": "Digit",
+              "year": "Digit"
+            }
+        """.trimIndent()
+        val dateDef = MDefinition.parse(dateJson)
+        assertNotNull(dateDef)
+        val sampleDate1 = """
+            {
+              "day": 11,
+              "month": 11,
+              "year": 1982
+            }
+        """.trimIndent()
+        assertEquals(dateDef, dateDef!!.test(sampleDate1))
+    }
+
+    @Test
+    fun `read definition from data and test data adhere to definition should fail if doesnt match`(){
+        val dateJson = """
+            {
+              "day": "Digit",
+              "month": "Digit",
+              "year": "Digit"
+            }
+        """.trimIndent()
+        val dateDef = MDefinition.parse(dateJson)
+        assertNotNull(dateDef)
+        val sampleDate1 = """
+            {
+              "day": 11,
+              "month": November,
+              "year": 1982
+            }
+        """.trimIndent()
+        assertNotEquals(dateDef, dateDef!!.test(sampleDate1))
+        assertEquals(Data, dateDef.test(sampleDate1))
+    }
+
+    @Test
     fun `test MDefinition MText ok`(){
         val json = """
             { "name": "Text" }
         """.trimIndent()
-        assertEquals(MDefinition(), MDefinition.test(json))
+        val def = MDefinition.test(json)
+        assertTrue(def is MDefinition)
     }
 
     @Test
@@ -18,7 +62,8 @@ internal class MDefinitionTest{
         val json = """
             { "Registered": "Flag" }
         """.trimIndent()
-        assertEquals(MDefinition(), MDefinition.test(json))
+        val def = MDefinition.test(json)
+        assertTrue(def is MDefinition)
     }
 
     @Test
@@ -26,7 +71,8 @@ internal class MDefinitionTest{
         val json = """
             { "Years of Experience": "Number" }
         """.trimIndent()
-        assertEquals(MDefinition(), MDefinition.test(json))
+        val def = MDefinition.test(json)
+        assertTrue(def is MDefinition)
     }
 
     @Test
@@ -34,7 +80,8 @@ internal class MDefinitionTest{
         val json = """
             { "Age": "Digit" }
         """.trimIndent()
-        assertEquals(MDefinition(), MDefinition.test(json))
+        val def = MDefinition.test(json)
+        assertTrue(def is MDefinition)
     }
 
     @Test
@@ -42,15 +89,18 @@ internal class MDefinitionTest{
         val json = """
             { "Name": "Text", "Age": "Digit" }
         """.trimIndent()
-        assertEquals(MDefinition(), MDefinition.test(json))
+        val def = MDefinition.test(json)
+        assertTrue(def is MDefinition)
     }
 
     @Test
     fun `test MDefinition invalid MType should fail`(){
         val json = """
-            { "Name: "MText" }
+            { "Name": "MText" }
         """.trimIndent()
-        assertNotEquals(MDefinition(), MDefinition.test(json))
+        val def = MDefinition.test(json)
+        assertFalse(def is MDefinition)
+        assertTrue(def is Data)
     }
 
     @Test
@@ -58,7 +108,10 @@ internal class MDefinitionTest{
         val json = """
             { "Name": "Text" }
         """.trimIndent()
+        val parsedDef = MDefinition.parse(json)
         assertEquals(MDefinition("Name", Text), MDefinition.parse(json))
+        assertEquals("Name", parsedDef!!.key)
+        assertEquals(Text, parsedDef.type)
     }
 
     @Test
@@ -91,6 +144,12 @@ internal class MDefinitionTest{
             { "Name": "Text", "Age": "Digit" }
         """.trimIndent()
         assertEquals(MDefinition(),  MDefinition.parse(json))
+        val def = MDefinition.parse(json)
+        assertEquals(2, def!!.definitions.size)
+        assertEquals("Name", def.definitions[0].key)
+        assertEquals("Age", def.definitions[1].key)
+        assertEquals(Text, def.definitions[0].type)
+        assertEquals(Digit, def.definitions[1].type)
     }
 
     @Test

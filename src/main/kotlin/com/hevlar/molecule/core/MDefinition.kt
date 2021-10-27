@@ -31,7 +31,7 @@ open class MDefinition(): MType("MDefinition", Data, { value ->
     var definitions = listOf<MDefinition>()
 
     constructor(key: String, type: MType) : this() {
-        this.key = name
+        this.key = key
         this.type = type
     }
 
@@ -41,11 +41,38 @@ open class MDefinition(): MType("MDefinition", Data, { value ->
 
     companion object {
         fun test(value: String): MType {
-            return MDefinition().test(value)
+            return if (MDefinition().parse(value) != null) MDefinition() else Data.test(value)
         }
 
         fun parse(value: String): MDefinition? {
             return MDefinition().parse(value)
+        }
+    }
+
+    override fun test(value: String): MType {
+        try {
+            val valueMap = Data.parse(value)
+            if (definitions.isEmpty()){
+                if (test(key, valueMap!![key]) == this) return this
+            } else {
+                val allDefPass = definitions.all { it.test(it.key, valueMap!![it.key]) == it }
+                if (allDefPass) return this
+            }
+        }catch (e: Throwable){
+            return this.parent!!.test(value)
+        }
+        return this.parent!!.test(value)
+    }
+
+    fun test(key: String, value: Any?): MType{
+        return try {
+          if (this.key == key && type!!.test(value.toString()) == type) {
+              this
+          } else {
+              this.parent!!.test(value.toString())
+          }
+        } catch (e: Throwable) {
+            this.parent!!.test(value.toString())
         }
     }
 

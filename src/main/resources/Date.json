@@ -1,7 +1,6 @@
 {
-  "Date": {
-    "day": "Digit",
-    "month": "Digit",
-    "year": "Digit"
-  }
+  "day": "Digit",
+  "month": "Digit",
+  "year": "Digit"
 }
+
