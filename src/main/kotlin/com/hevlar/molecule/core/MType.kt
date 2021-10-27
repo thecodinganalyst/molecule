@@ -1,5 +1,8 @@
 package com.hevlar.molecule.core
 
+import java.math.BigDecimal
+import java.math.BigInteger
+
 interface Testable{
     fun test(value: String): MType
 }
@@ -41,9 +44,21 @@ open class MType(val name: String, val parent: MType?, val parseFunction: (Strin
 
 object Text: MType("Text", null, { it })
 
-object Number: MType("Number", Text, { it.toBigDecimalOrNull() })
-object Flag: MType("Flag", Text, { it.toBooleanStrictOrNull() })
-object Digit: MType("Digit", Number, { it.toBigIntegerOrNull() })
+object Number: MType("Number", Text, { it.toBigDecimalOrNull() }){
+    override fun parse(value: String): BigDecimal? {
+        return parseFunction(value) as BigDecimal?
+    }
+}
+object Flag: MType("Flag", Text, { it.toBooleanStrictOrNull() }){
+    override fun parse(value: String): Boolean? {
+        return parseFunction(value) as Boolean?
+    }
+}
+object Digit: MType("Digit", Number, { it.toBigIntegerOrNull() }){
+    override fun parse(value: String): BigInteger? {
+        return parseFunction(value) as BigInteger?
+    }
+}
 
 object MTypeLibrary {
     private val types: MutableMap<String, MType> = mutableMapOf(
