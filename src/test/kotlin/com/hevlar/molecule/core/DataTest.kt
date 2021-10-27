@@ -3,6 +3,7 @@ package com.hevlar.molecule.core
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
+import java.math.BigInteger
 
 internal class DataTest {
 
@@ -14,7 +15,7 @@ internal class DataTest {
         val expected = HashMap<String, Any>()
         expected["name"] = "alex"
         expected["gender"] = "m"
-        expected["age"] = BigDecimal("20")
+        expected["age"] = BigInteger("20")
         expected["registered"] = true
         expected["locked"] = false
         val actual = Data.parse(json)

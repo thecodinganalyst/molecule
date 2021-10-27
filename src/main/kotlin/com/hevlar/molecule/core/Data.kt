@@ -3,7 +3,7 @@ package com.hevlar.molecule.core
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 
-object Data: MType("MMap", Text, { value ->
+object Data: MType("Data", Text, { value ->
     try{
         Gson()
             .fromJson(value, JsonObject::class.java)
@@ -15,12 +15,18 @@ object Data: MType("MMap", Text, { value ->
                     if (primitive.isBoolean) {
                         it.value.asJsonPrimitive.asBoolean
                     } else if (primitive.isNumber) {
-                        it.value.asJsonPrimitive.asBigDecimal
+                        try {
+                            it.value.asJsonPrimitive.asBigInteger
+                        }catch (e2: Throwable){
+                            it.value.asJsonPrimitive.asBigDecimal
+                        }
                     } else {
-                        it.value.asString
+                        it.value.asJsonPrimitive.asString
                     }
-                }else if (it.value.isJsonObject){
-                    Data.parse(it.value.toString()) ?: {}
+                }else if (it.value.isJsonObject) {
+                    Data.parse(it.value.toString())
+                }else if (it.value.isJsonArray){
+                    Series.parse(it.value.asJsonArray.toString())
                 }else{
                     it.value
                 }

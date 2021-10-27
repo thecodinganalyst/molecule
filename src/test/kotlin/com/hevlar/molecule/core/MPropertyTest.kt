@@ -18,6 +18,30 @@ internal class MPropertyTest{
     }
 
     @Test
+    fun `parse property as list ok without required field`(){
+        val json = """
+            [ Text, "hello" ]
+        """.trimIndent()
+        val prop = MProperty.parse(json) as MProperty
+        assertEquals(MProperty(), prop)
+        assertEquals(Text, prop.type)
+        assertEquals("hello", prop.default)
+        assertEquals(true, prop.required)
+    }
+
+    @Test
+    fun `parse property as list ok without default field`(){
+        val json = """
+            [ Text, , false ]
+        """.trimIndent()
+        val prop = MProperty.parse(json) as MProperty
+        assertEquals(MProperty(), prop)
+        assertEquals(Text, prop.type)
+        assertNull(prop.default)
+        assertEquals(false, prop.required)
+    }
+
+    @Test
     fun `parse property ok`(){
         val json = """
             { type: Text, default: "hello", required: false }

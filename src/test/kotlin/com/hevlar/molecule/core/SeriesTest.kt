@@ -1,22 +1,41 @@
 package com.hevlar.molecule.core
 
-import com.google.gson.JsonObject
-import com.google.gson.JsonPrimitive
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import java.math.BigDecimal
+import java.math.BigInteger
 
 internal class SeriesTest {
+
+    @Test
+    fun `MList can parse mix of series types`(){
+        val json = """
+            [1, 2.3, "c"]
+        """.trimIndent()
+        val expected = listOf(BigInteger("1"), BigDecimal("2.3"), "c")
+        val actual = Series.parse(json)
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `MList can parse series of a series`(){
+        val json = """
+            [["a", "b", "c"], ["d", "e", "f"], ["g", "h", "i"]]
+        """.trimIndent()
+        val expected = listOf(
+            listOf("a", "b", "c"),
+            listOf("d", "e", "f"),
+            listOf("g", "h", "i")
+        )
+        assertEquals(expected, Series.parse(json))
+    }
 
     @Test
     fun `MList can parse simple json list`(){
         val json = """
             ["a", "b", "c"]
         """.trimIndent()
-        val expected = listOf(
-            JsonPrimitive("a"),
-            JsonPrimitive("b"),
-            JsonPrimitive("c"),
-        )
+        val expected = listOf("a", "b", "c")
         assertEquals(expected, Series.parse(json))
     }
 
@@ -37,22 +56,20 @@ internal class SeriesTest {
                 {"name": "christopher", "gender": "m", "age": 24 }
             ]
         """.trimIndent()
-        val expectedA = JsonObject()
-        expectedA.addProperty("name", "alex")
-        expectedA.addProperty("gender", "m")
-        expectedA.addProperty("age", 20)
-        val expectedB = JsonObject()
-        expectedB.addProperty("name", "bernardine")
-        expectedB.addProperty("gender", "f")
-        expectedB.addProperty("age", 18)
-        val expectedC = JsonObject()
-        expectedC.addProperty("name", "christopher")
-        expectedC.addProperty("gender", "m")
-        expectedC.addProperty("age", 24)
+        val expectedA = mapOf(
+            "name" to "alex", "gender" to "m", "age" to BigInteger("20")
+        )
+        val expectedB = mapOf(
+            "name" to "bernardine", "gender" to "f", "age" to BigInteger("18")
+        )
+        val expectedC = mapOf(
+            "name" to "christopher", "gender" to "m", "age" to BigInteger("24")
+        )
         val expected = listOf(
             expectedA, expectedB, expectedC
         )
-        assertEquals(expected, Series.parse(json))
+        val actual = Series.parse(json)
+        assertEquals(expected, actual)
     }
 
     @Test

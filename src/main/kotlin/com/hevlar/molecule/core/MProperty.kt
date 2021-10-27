@@ -57,10 +57,10 @@ open class MProperty() : MType("MProperty", Data, {
 
             val series = Series.parse(value)
             if (series != null) {
-                val type = parse("type: ${series[0]}")
-                val default = if (series.size >= 1) "default: ${series[1]}" else ""
-                val required = if(series.size >= 2) "required: ${series[2]}" else ""
-                return MProperty().parse("$type $default $required")
+                val type = "type: ${series[0]}"
+                val default = if (series.size >= 2 && series[1] != null) ", default: ${series[1]}" else ""
+                val required = if(series.size >= 3) ", required: ${series[2]}" else ""
+                return MProperty().parse("{ $type $default $required }")
             }
 
             return MProperty().parse(value)
