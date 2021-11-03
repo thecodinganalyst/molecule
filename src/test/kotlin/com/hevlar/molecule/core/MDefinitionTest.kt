@@ -6,6 +6,18 @@ import org.junit.jupiter.api.Test
 internal class MDefinitionTest{
 
     @Test
+    fun `test definition with key and value should pass`(){
+        val dayDef = MDefinition("day", Digit)
+        assertEquals(dayDef, dayDef.test("day", 12))
+    }
+
+    @Test
+    fun `test definition with key and value should fail`(){
+        val dayDef = MDefinition("day", Digit)
+        assertNotEquals(dayDef, dayDef.test("day", "hello"))
+    }
+
+    @Test
     fun `read definition from data and test data adhere to definition`(){
         val dateJson = """
             {
