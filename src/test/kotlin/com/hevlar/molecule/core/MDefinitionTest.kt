@@ -6,6 +6,15 @@ import org.junit.jupiter.api.Test
 internal class MDefinitionTest{
 
     @Test
+    fun `complex definitions can parse arrays as object`(){
+        val propDef = MDefinition(listOf(
+            MDefinition("type", MType.Companion),
+            MDefinition("required", Flag),
+            MDefinition("default", Text)
+        ))
+    }
+
+    @Test
     fun `test definition with key and value should pass`(){
         val dayDef = MDefinition("day", Digit)
         assertEquals(dayDef, dayDef.test("day", 12))

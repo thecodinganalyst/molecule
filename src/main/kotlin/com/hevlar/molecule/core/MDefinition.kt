@@ -27,10 +27,10 @@ open class MDefinition(): MType("MDefinition", Data, { value ->
 }){
 
     var key = "MDefinition"
-    var type = parent
+    var type: Typeable = Data
     var definitions = listOf<MDefinition>()
 
-    constructor(key: String, type: MType) : this() {
+    constructor(key: String, type: Typeable) : this() {
         this.key = key
         this.type = type
     }

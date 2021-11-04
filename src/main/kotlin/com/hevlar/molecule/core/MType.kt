@@ -3,17 +3,26 @@ package com.hevlar.molecule.core
 import java.math.BigDecimal
 import java.math.BigInteger
 
-interface Testable{
+interface Typeable{
     fun test(value: String): MType
+    fun parse(value: String): Any?
 }
 
-open class MType(val name: String, val parent: MType?, val parseFunction: (String) -> Any?): Testable{
+open class MType(val name: String, val parent: Typeable?, val parseFunction: (String) -> Any?): Typeable{
 
-    companion object {
+    companion object: Typeable {
         fun getInstance(typeName: String): MType?{
+            return parse(typeName)
+        }
+
+        override fun test(value: String): MType {
+            return parse(value) ?: Text
+        }
+
+        override fun parse(value: String): MType? {
             return try {
                 val defaultPackage = this::class.java.packageName
-                val fqn = if (typeName.contains(".")) typeName else "${defaultPackage}.${typeName}"
+                val fqn = if (value.contains(".")) value else "${defaultPackage}.${value}"
                 Class.forName(fqn).kotlin.objectInstance as MType
             }catch (e: Throwable){
                 null
@@ -27,7 +36,7 @@ open class MType(val name: String, val parent: MType?, val parseFunction: (Strin
 
     override fun test(value: String): MType = if (parseFunction(value) != null){ this } else { parent!!.test(value) }
 
-    open fun parse(value: String): Any? = parseFunction(value)
+    override fun parse(value: String): Any? = parseFunction(value)
 
     override fun equals(other: Any?): Boolean {
         if (other !is MType) return false
