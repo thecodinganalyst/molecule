@@ -39,17 +39,17 @@ open class MProperty() : MType("MProperty", Data, {
     }
 
 }){
-    var type: MType? = null
+    var type: Typeable? = null
     var default: Any? = null
     var required = true
-    constructor(type: MType, default: Any?, required: Boolean?) : this() {
+    constructor(type: Typeable, default: Any?, required: Boolean?) : this() {
         this.type = type
         this.default = default
         this.required = required?: true
     }
 
     companion object {
-        fun test(value: String): MType {
+        fun test(value: String): Typeable {
             return if (MProperty().parse(value) != null) MProperty() else Data.test(value)
         }
 

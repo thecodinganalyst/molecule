@@ -40,7 +40,7 @@ open class MDefinition(): MType("MDefinition", Data, { value ->
     }
 
     companion object {
-        fun test(value: String): MType {
+        fun test(value: String): Typeable {
             return if (MDefinition().parse(value) != null) MDefinition() else Data.test(value)
         }
 
@@ -49,7 +49,7 @@ open class MDefinition(): MType("MDefinition", Data, { value ->
         }
     }
 
-    override fun test(value: String): MType {
+    override fun test(value: String): Typeable {
         try {
             val valueMap = Data.parse(value)
             if (definitions.isEmpty()){
@@ -64,13 +64,14 @@ open class MDefinition(): MType("MDefinition", Data, { value ->
         return this.parent!!.test(value)
     }
 
-    fun test(key: String, value: Any?): MType{
+    fun test(key: String, value: Any?): Typeable{
         return try {
-          if (this.key == key && type!!.test(value.toString()) == type) {
+            val testedType = type.test(value.toString())
+            if (this.key == key && type.test(value.toString()) == type) {
               this
-          } else {
+            } else {
               this.parent!!.test(value.toString())
-          }
+            }
         } catch (e: Throwable) {
             this.parent!!.test(value.toString())
         }

@@ -4,22 +4,27 @@ import java.math.BigDecimal
 import java.math.BigInteger
 
 interface Typeable{
-    fun test(value: String): MType
+    val name: String
+    val parent: Typeable?
+    fun test(value: String): Typeable
     fun parse(value: String): Any?
 }
 
-open class MType(val name: String, val parent: Typeable?, val parseFunction: (String) -> Any?): Typeable{
+open class MType(override val name: String,override val parent: Typeable?, val parseFunction: (String) -> Any?): Typeable{
 
     companion object: Typeable {
-        fun getInstance(typeName: String): MType?{
+        fun getInstance(typeName: String): Typeable?{
             return parse(typeName)
         }
 
-        override fun test(value: String): MType {
+        override val name = "MType"
+        override val parent = Text
+
+        override fun test(value: String): Typeable {
             return parse(value) ?: Text
         }
 
-        override fun parse(value: String): MType? {
+        override fun parse(value: String): Typeable? {
             return try {
                 val defaultPackage = this::class.java.packageName
                 val fqn = if (value.contains(".")) value else "${defaultPackage}.${value}"
@@ -28,18 +33,23 @@ open class MType(val name: String, val parent: Typeable?, val parseFunction: (St
                 null
             }
         }
+
+        override fun equals(other: Any?): Boolean {
+            return other is Typeable
+        }
     }
 
     init {
         if (parent == null && name != "Text") throw Throwable("Only Text can have no parents")
     }
 
-    override fun test(value: String): MType = if (parseFunction(value) != null){ this } else { parent!!.test(value) }
+    override fun test(value: String): Typeable = if (parseFunction(value) != null){ this } else { parent!!.test(value) }
 
     override fun parse(value: String): Any? = parseFunction(value)
 
     override fun equals(other: Any?): Boolean {
-        if (other !is MType) return false
+        if (other !is Typeable) return false
+        if (other is Companion) return true
         return this.name == other.name && this.parent == other.parent
     }
 

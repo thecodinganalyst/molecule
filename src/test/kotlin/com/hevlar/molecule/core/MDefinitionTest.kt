@@ -5,13 +5,34 @@ import org.junit.jupiter.api.Test
 
 internal class MDefinitionTest{
 
+//    @Test
+//    fun `complex definitions can parse arrays as object`(){
+//        val propDef = MDefinition(listOf(
+//            MDefinition("type", MType.Companion),
+//            MDefinition("required", Flag),
+//            MDefinition("default", Text)
+//        ))
+//        val json = """
+//            ["Text", true, "hello world"]
+//        """.trimIndent()
+//        assertEquals(propDef, propDef.parse(json))
+//    }
+
     @Test
-    fun `complex definitions can parse arrays as object`(){
+    fun `definition can contain typeable as type`(){
         val propDef = MDefinition(listOf(
             MDefinition("type", MType.Companion),
             MDefinition("required", Flag),
             MDefinition("default", Text)
         ))
+        val json = """
+            {
+              "type": "Text",
+              "required": "true",
+              "default": "hello world"
+            }
+        """.trimIndent()
+        assertEquals(propDef, propDef.test(json))
     }
 
     @Test
