@@ -7,7 +7,8 @@ Definition can also contain multiple definitions, e.g { name: Text, age: Number 
  */
 open class MDefinition(): MType("MDefinition", Data, { value ->
     try {
-        val valueStr = if (value.trim().startsWith("{") && value.trim().endsWith("}")) value else "{ $value }"
+        val isObject = value.trim().startsWith("{") && value.trim().endsWith("}")
+        val valueStr = if (!isObject) "{ $value }" else value
         val map = Data.parse(valueStr) ?: throw Throwable("value for parseFunction is not a valid map")
 
         val defList = map.map {
@@ -51,7 +52,15 @@ open class MDefinition(): MType("MDefinition", Data, { value ->
 
     override fun test(value: String): Typeable {
         try {
-            val valueMap = Data.parse(value)
+            val isArray = value.trim().startsWith("[") && value.trim().endsWith("]")
+            val valueMap = if (isArray) {
+                Series.parse(value)
+                    ?.mapIndexed{ i, it -> Pair(definitions[i].key, it)}
+                    ?.associate { it }
+            }else{
+                Data.parse(value)
+            }
+
             if (definitions.isEmpty()){
                 if (test(key, valueMap!![key]) == this) return this
             } else {
@@ -66,7 +75,6 @@ open class MDefinition(): MType("MDefinition", Data, { value ->
 
     fun test(key: String, value: Any?): Typeable{
         return try {
-            val testedType = type.test(value.toString())
             if (this.key == key && type.test(value.toString()) == type) {
               this
             } else {
@@ -78,6 +86,6 @@ open class MDefinition(): MType("MDefinition", Data, { value ->
     }
 
     override fun parse(value: String): MDefinition? {
-        return this.parseFunction(value) as MDefinition?
+        return parseFunction(value) as MDefinition?
     }
 }
