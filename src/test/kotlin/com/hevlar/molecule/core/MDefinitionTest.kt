@@ -19,6 +19,19 @@ internal class MDefinitionTest{
     }
 
     @Test
+    fun `complex definitions test arrays as object will fail if data is of invalid type`(){
+        val propDef = MDefinition(listOf(
+            MDefinition("type", MType.Companion),
+            MDefinition("required", Flag),
+            MDefinition("default", Text)
+        ))
+        val json = """
+            ["flower", true, "hello world"]
+        """.trimIndent()
+        assertEquals(propDef, propDef.test(json))
+    }
+
+    @Test
     fun `definition can contain typeable as type`(){
         val propDef = MDefinition(listOf(
             MDefinition("type", MType.Companion),
