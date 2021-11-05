@@ -42,11 +42,11 @@ open class MDefinition(): MType("MDefinition", Data, { value ->
 
     companion object {
         fun test(value: String): Typeable {
-            return if (MDefinition().parse(value) != null) MDefinition() else Data.test(value)
+            return if (MDefinition().parseFunction(value) != null) MDefinition() else Data.test(value)
         }
 
         fun parse(value: String): MDefinition? {
-            return MDefinition().parse(value)
+            return MDefinition().parseFunction(value) as MDefinition?
         }
     }
 
@@ -85,7 +85,29 @@ open class MDefinition(): MType("MDefinition", Data, { value ->
         }
     }
 
-    override fun parse(value: String): MDefinition? {
-        return parseFunction(value) as MDefinition?
+    override fun parse(value: String): Map<String, Any?>? {
+        try {
+            val isObject = value.trim().startsWith("{") && value.trim().endsWith("}")
+            val isArray = value.trim().startsWith("[") && value.trim().endsWith("]")
+            val valueStr = if (!isObject && !isArray) "{ $value }" else value
+            val map = if (isArray) {
+                Series.parse(valueStr)
+                    ?.mapIndexed{ i, it -> Pair(definitions[i].key, it)}
+                    ?.associate { it }
+            }else{
+                Data.parse(valueStr)
+            }
+
+            if (definitions.isEmpty()){
+                if (test(key, map!![key]) == this) return map
+            } else {
+                val allDefPass = definitions.all { it.test(it.key, map!![it.key]) == it }
+                if (allDefPass) return map
+            }
+
+        }catch (e: Throwable){
+            return null
+        }
+        return null
     }
 }
